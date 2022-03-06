@@ -77,25 +77,7 @@ function body(next_cursor, has_more, squadBody, bugOrDone){
 
 
 async function requestFunction (squadBody, bugOrDone){
-    const resultTemp = await fetch(apiURL, request({
-        "filter": {
-            "and": [
-                {
-                    "property": "Stage",
-                    "select": {
-                        "equals": "✅   Done"
-                    }
-                },
-                {
-                    "property": "Squad",
-                    "multi_select": {
-                        "contains": 'Work squad'
-                    }
-                }
-            ]
-        }
-
-    }))
+    const resultTemp = await fetch(apiURL, request(body(next_cursor,result_hash_more,squadBody,bugOrDone)))
         .then(response => response.json())
         .then(response => { return (response) })
 
@@ -109,7 +91,7 @@ async function requestFunction (squadBody, bugOrDone){
         }
 
 
-    return resultTemp.results
+    return resultTemp;
 
 }
 
@@ -126,9 +108,9 @@ function trigger_hash_more(props){
 }
 
 
-var result_hash_more = false
+var result_hash_more = true
 var next_cursor = ''
-let workSquadDone = 0;
+let workSquadDone = [];
 let talentSquadDone = []
 let uggSquadDone = []
 let genomeSquadDone = []
@@ -137,7 +119,16 @@ var SquadsDone = [workSquadDone, talentSquadDone, uggSquadDone, genomeSquadDone]
 
 
 const getResults = async() =>{
-    result = await requestFunction(listSquads[0], done)
+    /* result = await requestFunction(listSquads[0], done) */
+    while (result_hash_more != false) {
+        if (trigger) {
+            trigger_hash_more(false)
+            trigger = false
+        }
+        result = await requestFunction(listSquads[0], done)
+        SquadsDone[0] = [...SquadsDone[0], result]
+
+    }
     return result;
     
 }
@@ -145,4 +136,4 @@ const getResults = async() =>{
 
 
 
-module.exports = getResults();;
+module.exports = getResults();
