@@ -131,25 +131,29 @@ var SquadsDone = [workSquadDone, talentSquadDone, uggSquadDone, genomeSquadDone]
 const getResults = async() =>{
     var counter_result=0;
     /* result = await requestFunction(listSquads[0], done) */
-    while (result_hash_more != false) {
-        if (trigger) {
-            trigger_hash_more(false)
-            trigger = false
-        }
-        result = await requestFunction(listSquads[0], done)
-        SquadsDone[0] = [...SquadsDone[0], result.length]
-        counter_result=counter_result+result.results.length;
 
+    for (let i = 0; i < listSquads.length; i++) {
+        trigger_hash_more(true);
+        while (result_hash_more != false) {
+            if (trigger) {
+                trigger_hash_more(false)
+                trigger = false
+            }
+            result = await requestFunction(listSquads[i], done)
+            SquadsDone[i] = [...SquadsDone[i], result.results.length]
+            counter_result=counter_result+result.results.length;
+    
+        }
     }
     console.log(100,counter_result);
     console.log(200,result.results.length);
     console.log('result_hash_more: ',result_hash_more);
-    console.log('var next_cursor', next_cursor)
+    console.log('var next_cursor: ', next_cursor)
     next_cursor='';
     result_hash_more=true;
     trigger=true;
 
-    return counter_result;
+    return SquadsDone;
     
 }
 
