@@ -14,9 +14,7 @@ router.get('/data', async(req, res)=>{
     let dataSquad;
     fs.readFile(path.join(__dirname, '../JSONFile/data.json'),{encoding:'utf-8'} , (err, jsonString) =>{
         if(err){
-            console.log(err)
         }else{
-            console.log(5, jsonString);
             dataSquad=jsonString;    
 /*             console.log(2000,dataSquad)
             console.log(3000,typeof(dataSquad)); */  
@@ -112,7 +110,7 @@ async function requestFunction (squadBody, bugOrDone){
         .then(response => response.json())
         .then(response => { return (response) })
 
-         console.log(resultTemp) 
+         
 
         if (resultTemp.has_more) {
             next_cursor = resultTemp.next_cursor
@@ -173,7 +171,7 @@ const getResults = async() =>{
     }
     const obj = Object.assign({}, SquadsDone);
     fs.writeFile(path.join(__dirname, '../JSONFile/data.json'), JSON.stringify(obj), function(err){
-            console.log('Completed JSON file')
+            /* console.log('Completed JSON file') */
     });
 
 
