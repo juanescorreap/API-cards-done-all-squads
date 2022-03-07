@@ -1,19 +1,40 @@
 const {Router} = require('express');
+const path = require('path')
+const fs = require('fs');
 const router = Router();
 
 
-router.get('/', async(req, res) =>{
+router.get('/trigger', async(req, res) =>{
     
     var results = await getResults();
-    res.json((results))
+    res.json((JSON.stringify(results)))
+})
+
+router.get('/data', async(req, res)=>{
+    let dataSquad;
+    fs.readFile(path.join(__dirname, '../JSONFile/data.json'),{encoding:'utf-8'} , (err, jsonString) =>{
+        if(err){
+            console.log(err)
+        }else{
+            console.log(5, jsonString);
+            dataSquad=jsonString;    
+/*             console.log(2000,dataSquad)
+            console.log(3000,typeof(dataSquad)); */  
+            res.json((JSON.parse(dataSquad)));
+        }
+    })
+
 })
 
 
 const fetch = require('node-fetch');
+const { json } = require('express/lib/response')
 
 const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef7294344e5b/query";
 
-const listSquads = ['Work squad', 'Talent squad', 'UGG squad', 'Genome squad']
+
+
+const listSquads = ['Algorithms squad','Applicants acquisition squad','Platform squad', 'Genome squad','Work squad', 'Talent squad', 'UGG squad',, ,'Talent seeker acquisition squad']
 
 
 function request(body){
@@ -118,14 +139,19 @@ function trigger_hash_more(props){
 }
 
 
-var result_hash_more = true
+var result_hash_more = false
 var next_cursor = ''
+let algorithmsSquad=[];
+let applicantsAcquisitionSquad = []
+let platformSquad=[];
+let genomeSquadDone = [];
 let workSquadDone = [];
-let talentSquadDone = []
-let uggSquadDone = []
-let genomeSquadDone = []
+let talentSquadDone = [];
+let uggSquadDone = [];
+let talentSeekerAcquisitionSquad=[];
 
-var SquadsDone = [workSquadDone, talentSquadDone, uggSquadDone, genomeSquadDone]
+
+var SquadsDone = [algorithmsSquad, applicantsAcquisitionSquad, platformSquad, genomeSquadDone, workSquadDone, talentSquadDone,uggSquadDone,talentSeekerAcquisitionSquad]
 
 
 const getResults = async() =>{
@@ -145,14 +171,20 @@ const getResults = async() =>{
     
         }
     }
-    console.log(100,counter_result);
+    const obj = Object.assign({}, SquadsDone);
+    fs.writeFile(path.join(__dirname, '../JSONFile/data.json'), JSON.stringify(obj), function(err){
+            console.log('Completed JSON file')
+    });
+
+
+/*     console.log(100,counter_result);
     console.log(200,result.results.length);
     console.log('result_hash_more: ',result_hash_more);
     console.log('var next_cursor: ', next_cursor)
     next_cursor='';
     result_hash_more=true;
     trigger=true;
-
+ */
     return SquadsDone;
     
 }
