@@ -5,8 +5,6 @@ const router = Router();
 
 
 router.get('/trigger', async(req, res) =>{
-    if (req.session.user) return next();
-    return next(new NotAuthorizedError());
     
     var results = await getResults();
     res.json((JSON.stringify(results)))
