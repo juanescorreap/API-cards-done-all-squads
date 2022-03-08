@@ -3,17 +3,6 @@ const path = require('path')
 const fs = require('fs');
 const router = Router();
 
-router.get('/changestate/:text', async(req, res)=>{
-    var dataSet= {
-        data: ""
-    }
-    console.log(req.params['text']);
-    dataSet['data'] = req.params['text'];
-    console.log(dataSet)
-    fs.writeFile(path.join(__dirname, '../JSONFile/data.json'), JSON.stringify(dataSet), function(err){
-    
-});
-})
 
 router.get('/trigger', async(req, res) =>{
 
@@ -151,7 +140,7 @@ function trigger_hash_more(props){
 }
 
 
-var result_hash_more = true
+var result_hash_more = false
 var next_cursor = ''
 let algorithmsSquad=[];
 let applicantsAcquisitionSquad = []
@@ -170,16 +159,19 @@ const getResults = async() =>{
     var counter_result=0;
     /* result = await requestFunction(listSquads[0], done) */
 
+    for (let i = 0; i < listSquads.length; i++) {
+        trigger_hash_more(true);
         while (result_hash_more != false) {
             if (trigger) {
                 trigger_hash_more(false)
                 trigger = false
             }
-            result = await requestFunction(listSquads[0], done)
-            SquadsDone[0] = [...SquadsDone[0], result.results.length]
+            result = await requestFunction(listSquads[i], done)
+            SquadsDone[i] = [...SquadsDone[i], result.results.length]
             counter_result=counter_result+result.results.length;
     
         }
+    }
     const obj = Object.assign({}, SquadsDone);
     fs.writeFile(path.join(__dirname, '../JSONFile/data.json'), JSON.stringify(obj), function(err){
             /* console.log('Completed JSON file') */
