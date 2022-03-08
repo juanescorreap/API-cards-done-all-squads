@@ -3,6 +3,20 @@ const path = require('path')
 const fs = require('fs');
 const router = Router();
 
+router.get('/changestate/:text', async(req, res)=>{
+    var dataSet= {
+        data: ""
+    }
+    console.log(req.params['text']);
+    dataSet['data'] = req.params['text'];
+    console.log(dataSet)
+    fs.writeFile(path.join(__dirname, '../JSONFile/data.json'), JSON.stringify(dataSet), function(err){
+    
+});
+
+    res.send(JSON.stringify(dataSet))
+})
+
 
 router.get('/trigger', async(req, res) =>{
 
@@ -140,7 +154,7 @@ function trigger_hash_more(props){
 }
 
 
-var result_hash_more = false
+var result_hash_more = true
 var next_cursor = ''
 let algorithmsSquad=[];
 let applicantsAcquisitionSquad = []
