@@ -49,7 +49,7 @@ const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef729434
 
 
 
-const listSquads = ['Algorithms squad','Applicants acquisition squad','Platform squad' , 'Genome squad']/*,'Work squad', 'Talent squad', 'UGG squad','Talent seeker acquisition squad'] */
+const listSquads = ['Algorithms squad','Applicants acquisition squad','Platform squad']/* , 'Genome squad','Work squad', 'Talent squad', 'UGG squad','Talent seeker acquisition squad'] */
 
 
 function request(body){
