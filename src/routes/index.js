@@ -3,6 +3,15 @@ const path = require('path')
 const fs = require('fs');
 const router = Router();
 
+// Routes
+
+router.get('/secondtrigger', async(req, res) =>{
+
+    
+    var results = await getResultsSecondList();
+    res.json((JSON.stringify(results)))
+})
+
 router.get('/changestate/:text', async(req, res)=>{
     var dataSet= {
         data: ""
@@ -30,10 +39,8 @@ router.get('/data', async(req, res)=>{
     fs.readFile(path.join(__dirname, '../JSONFile/data.json'),{encoding:'utf-8'} , (err, jsonString) =>{
         if(err){
         }else{
-            dataSquad=jsonString;    
-/*             console.log(2000,dataSquad)
-            console.log(3000,typeof(dataSquad)); */  
-            res.json((JSON.parse(dataSquad)));
+            dataSquad=jsonString;     
+            res.json(JSON.parse(dataSquad));
         }
     })
 
@@ -41,15 +48,24 @@ router.get('/data', async(req, res)=>{
 
 })
 
+///Code
+
 
 const fetch = require('node-fetch');
 const { json } = require('express/lib/response')
 
 const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef7294344e5b/query";
 
+const dataTemplate = {
+    algorithmsSquad: 0,
+    applicantsAcquisitionSquad:0,
+    platformSquad:0
+}
+
 
 
 const listSquads = ['Algorithms squad','Applicants acquisition squad','Platform squad']/* , 'Genome squad','Work squad', 'Talent squad', 'UGG squad','Talent seeker acquisition squad'] */
+const secondListSquads = ['Genome squad','Work squad']/* , 'UGG squad','Talent seeker acquisition squad'] */
 
 
 function request(body){
@@ -166,12 +182,12 @@ let uggSquadDone = [];
 let talentSeekerAcquisitionSquad=[];
 
 
-var SquadsDone = [algorithmsSquad, applicantsAcquisitionSquad, platformSquad, genomeSquadDone, workSquadDone, talentSquadDone,uggSquadDone,talentSeekerAcquisitionSquad]
-
-
+var SquadsDone = [algorithmsSquad, applicantsAcquisitionSquad, platformSquad]/* , genomeSquadDone, workSquadDone, talentSquadDone,uggSquadDone,talentSeekerAcquisitionSquad] */
+var SquadDoneSecondList = [genomeSquadDone, workSquadDone]/* ,uggSquadDone,talentSeekerAcquisitionSquad]
+ */
 const getResults = async() =>{
     var counter_result=0;
-    /* result = await requestFunction(listSquads[0], done) */
+
 
     for (let i = 0; i < listSquads.length; i++) {
         trigger_hash_more(true);
@@ -182,25 +198,67 @@ const getResults = async() =>{
             }
             result = await requestFunction(listSquads[i], done)
             SquadsDone[i] = [...SquadsDone[i], result.results.length]
+            /* counter_result=counter_result+result.results.length; */
+
+    
+        }
+
+
+    }
+
+    var counterone=0, countertwo=0, counterthree=0;
+
+    for(let i=0; i < SquadsDone[0].length; i++){
+        counterone = counterone + SquadsDone[0][i];
+    }
+
+    for(let i=0; i < SquadsDone[1].length; i++){
+        countertwo = countertwo + SquadsDone[1][i];
+    }
+
+    for(let i=0; i < SquadsDone[2].length; i++){
+        counterthree = counterthree + SquadsDone[2][i];
+    }
+
+    console.log(SquadsDone[0]);
+    console.log(SquadsDone[1]);
+    console.log(SquadsDone[2]);
+
+    dataTemplate['algorithmsSquad'] = counterone;
+    dataTemplate['applicantsAcquisitionSquad']= countertwo;
+    dataTemplate['platformSquad']=counterthree;
+    /* const obj = Object.assign({}, SquadsDone); */
+    fs.writeFile(path.join(__dirname, '../JSONFile/data.json'), JSON.stringify(dataTemplate), function(err){
+
+    });
+
+    return dataTemplate;
+    
+}
+
+const getResultsSecondList = async() =>{
+    var counter_result=0;
+
+
+    for (let i = 0; i < secondListSquads.length; i++) {
+        trigger_hash_more(true);
+        while (result_hash_more != false) {
+            if (trigger) {
+                trigger_hash_more(false)
+                trigger = false
+            }
+            result = await requestFunction(secondListSquads[i], done)
+            SquadDoneSecondList[i] = [...SquadDoneSecondList[i], result.results.length]
             counter_result=counter_result+result.results.length;
     
         }
     }
-    const obj = Object.assign({}, SquadsDone);
+    const obj = Object.assign({}, SquadDoneSecondList);
     fs.writeFile(path.join(__dirname, '../JSONFile/data.json'), JSON.stringify(obj), function(err){
-            /* console.log('Completed JSON file') */
+
     });
 
-
-/*     console.log(100,counter_result);
-    console.log(200,result.results.length);
-    console.log('result_hash_more: ',result_hash_more);
-    console.log('var next_cursor: ', next_cursor)
-    next_cursor='';
-    result_hash_more=true;
-    trigger=true;
- */
-    return SquadsDone;
+    return SquadDoneSecondList;
     
 }
 
