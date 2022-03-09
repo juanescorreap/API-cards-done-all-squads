@@ -52,7 +52,10 @@ router.get('/trigger-al-aa-ps/:typeofbug/:priority', async (req, res) => {
     dataTemplate = {
         algorithmsSquad: 0,
         applicantsAcquisitionSquad: 0,
-        platformSquad: 0
+        platformSquad: 0,
+        algorithms:'algorithmsSquad',
+        applicantsAcquisition: 'applicantsAcquisitionSquad',
+        platform:'platformSquad'
     }
 })
 
@@ -93,7 +96,10 @@ router.get('/trigger-g-ugg-w/:typeofbug/:priority', async (req, res) => {
     dataSecondSquadList = {
         genomeSquadDone: 0,
         uggSquadDone: 0,
-        workSquadDone: 0
+        workSquadDone: 0,
+        genomeSquadDone:'genomeSquadDone',
+        uggSquadDone:'uggSquadDone',
+        workSquadDone:'workSquadDone'
     }
 })
 
@@ -134,7 +140,9 @@ router.get('/trigger-t-tsas/:typeofbug/:priority', async (req, res) => {
 
     dataThirdSquadList = {
         talentSquadDone: 0,
-        talentSeekerAcquisitionSquad: 0
+        talentSeekerAcquisitionSquad: 0,
+        talentSquadDone:'talentSquadDone',
+        talentSeekerAcquisitionSquad:'talentSeekerAcquisitionSquad'
     }
 })
 
@@ -202,18 +210,28 @@ const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef729434
 var dataTemplate = {
     algorithmsSquad: 0,
     applicantsAcquisitionSquad: 0,
-    platformSquad: 0
+    platformSquad: 0,
+    algorithms:'algorithmsSquad',
+    applicantsAcquisition: 'applicantsAcquisitionSquad',
+    platform:'platformSquad'
+
 }
 
 var dataSecondSquadList = {
     genomeSquadDone: 0,
     uggSquadDone: 0,
-    workSquadDone: 0
+    workSquadDone: 0,
+    genomeSquad:'genomeSquad',
+    uggSquad:'uggSquad',
+    workSquad:'workSquad'
+
 }
 
 var dataThirdSquadList = {
     talentSquadDone: 0,
-    talentSeekerAcquisitionSquad: 0
+    talentSeekerAcquisitionSquad: 0,
+    talentSquad:'talentSquad',
+    talentSeekerAcquisition:'talentSeekerAcquisitionSquad'
 }
 
 
