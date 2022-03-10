@@ -1,1 +1,1 @@
-{"algorithmsSquad":1,"applicantsAcquisitionSquad":3,"platformSquad":40,"algorithms":"algorithmsSquad","applicantsAcquisition":"applicantsAcquisitionSquad","platform":"platformSquad"}
+[{"squad":"Algorithms squad","number":0,"priority":"Highest","typeOfBug":"Post-release bug"},{"squad":"Applicants acquisition squad","number":2,"priority":"Highest","typeOfBug":"Post-release bug"},{"squad":"Platform squad","number":4,"priority":"Highest","typeOfBug":"Post-release bug"}]
