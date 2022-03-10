@@ -466,7 +466,12 @@ const getResults = async (priority, typeBug) => {
                 trigger_hash_more(false)
                 trigger = false
             }
-            result = await requestFunction(listSquads[i], done, priority, typeBug)
+            try{
+                result = await requestFunction(listSquads[i], done, priority, typeBug)
+            }catch(err){
+                console.error(err)
+            }
+            
             SquadsDone[i] = [...SquadsDone[i], result.results.length]
             console.log(SquadsDone)
             console.log(next_cursor)
@@ -538,7 +543,12 @@ const getResultsSecondList = async (priority, typeBug) => {
                 trigger_hash_more(false)
                 trigger = false
             }
-            result = await requestFunction(secondListSquads[i], done, priority, typeBug)
+
+            try{   
+                result = await requestFunction(secondListSquads[i], done, priority, typeBug)
+            }catch(err){
+                console.log(err)
+            }
             SquadDoneSecondList[i] = [...SquadDoneSecondList[i], result.results.length]
             console.log(SquadDoneSecondList)
             console.log(next_cursor)
@@ -616,7 +626,13 @@ const getResultsThirdList = async (priority, typeBug) => {
                 trigger_hash_more(false)
                 trigger = false
             }
-            result = await requestFunction(thirdListSquads[i], done, priority, typeBug)
+
+            try{
+                result = await requestFunction(thirdListSquads[i], done, priority, typeBug)
+            }catch(err){
+                console.log(err)
+            }
+
             SquadDoneThirdList[i] = [...SquadDoneThirdList[i], result.results.length]
             console.log(SquadDoneThirdList)
             console.log(next_cursor)
