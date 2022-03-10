@@ -40,7 +40,7 @@ router.get('/trigger-al-aa-ps/:typeofbug/:priority', async (req, res) => {
             var results = await getResults(priority[2], typeBug[0])
             res.json(((results)))
             break
-        case (reqPriority == 'highest' && reqTypeofbug == 'bug'):
+        case (reqPriority == 'highest' && reqTypeofbug == 'post-release-bug'):
             var results = await getResults(priority[2], typeBug[1])
             res.json(((results)))
             break
@@ -48,15 +48,24 @@ router.get('/trigger-al-aa-ps/:typeofbug/:priority', async (req, res) => {
             res.json(({ "message": "I couldn't find that route, sorry" }))
     }
 
-
-    dataTemplate = {
-        algorithmsSquad: 0,
-        applicantsAcquisitionSquad: 0,
-        platformSquad: 0,
-        algorithms:'algorithmsSquad',
-        applicantsAcquisition: 'applicantsAcquisitionSquad',
-        platform:'platformSquad'
-    }
+    dataTemplatejson=[
+        {
+            "squad": "Algorithms squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "Applicants acquisition squad",
+            "number": 2,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "Platform squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }
+    ]
 })
 
 router.get('/trigger-g-ugg-w/:typeofbug/:priority', async (req, res) => {
@@ -85,22 +94,31 @@ router.get('/trigger-g-ugg-w/:typeofbug/:priority', async (req, res) => {
             var results = await getResultsSecondList(priority[2], typeBug[0])
             res.json(((results)))
             break
-        case (reqPriority == 'highest' && reqTypeofbug == 'bug'):
+        case (reqPriority == 'highest' && reqTypeofbug == 'post-release-bug'):
             var results = await getResultsSecondList(priority[2], typeBug[1])
             res.json(((results)))
             break
         default:
             res.json(({ "message": "I couldn't find that route, sorry" }))
     }
-
-    dataSecondSquadList = {
-        genomeSquadDone: 0,
-        uggSquadDone: 0,
-        workSquadDone: 0,
-        genomeSquad:'genomeSquad',
-        uggSquad:'uggSquad',
-        workSquad:'workSquad'
-    }
+    dataSecondSquadListJson =[
+        {
+            "squad": "Genome squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "UGG squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "Work squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }
+    ]
 })
 
 router.get('/trigger-t-tsas/:typeofbug/:priority', async (req, res) => {
@@ -129,7 +147,7 @@ router.get('/trigger-t-tsas/:typeofbug/:priority', async (req, res) => {
             var results = await getResultsThirdList(priority[2], typeBug[0])
             res.json(((results)))
             break
-        case (reqPriority == 'highest' && reqTypeofbug == 'bug'):
+        case (reqPriority == 'highest' && reqTypeofbug == 'post-release-bug'):
             var results = await getResultsThirdList(priority[2], typeBug[1])
             res.json(((results)))
             break
@@ -138,12 +156,19 @@ router.get('/trigger-t-tsas/:typeofbug/:priority', async (req, res) => {
     }
 
 
-    dataThirdSquadList = {
-        talentSquadDone: 0,
-        talentSeekerAcquisitionSquad: 0,
-        talentSquad:'talentSquad',
-        talentSeekerAcquisition:'talentSeekerAcquisitionSquad'
-    }
+    dataThirdSquadListJson =[
+        {
+            "squad": "Talent squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "Talent seeker acquisition squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }
+    ]
 })
 
 
@@ -217,6 +242,25 @@ var dataTemplate = {
 
 }
 
+var dataTemplatejson=[
+    {
+        "squad": "Algorithms squad",
+        "number": 5,
+        "priority": "",
+        "typeOfBug": ""
+    }, {
+        "squad": "Algorithms squad",
+        "number": 2,
+        "priority": "",
+        "typeOfBug": ""
+    }, {
+        "squad": "Algorithms squad",
+        "number": 0,
+        "priority": "",
+        "typeOfBug": ""
+    }
+]
+
 var dataSecondSquadList = {
     genomeSquadDone: 0,
     uggSquadDone: 0,
@@ -227,12 +271,45 @@ var dataSecondSquadList = {
 
 }
 
+var dataSecondSquadListJson =[
+    {
+        "squad": "Genome squad",
+        "number": 0,
+        "priority": "",
+        "typeOfBug": ""
+    }, {
+        "squad": "UGG squad",
+        "number": 0,
+        "priority": "",
+        "typeOfBug": ""
+    }, {
+        "squad": "Work squad",
+        "number": 0,
+        "priority": "",
+        "typeOfBug": ""
+    }
+]
+
 var dataThirdSquadList = {
     talentSquadDone: 0,
     talentSeekerAcquisitionSquad: 0,
     talentSquad:'talentSquad',
     talentSeekerAcquisition:'talentSeekerAcquisitionSquad'
 }
+
+var dataThirdSquadListJson =[
+    {
+        "squad": "Talent squad",
+        "number": 0,
+        "priority": "",
+        "typeOfBug": ""
+    }, {
+        "squad": "Talent seeker acquisition squad",
+        "number": 0,
+        "priority": "",
+        "typeOfBug": ""
+    }
+]
 
 
 
@@ -420,15 +497,24 @@ const getResults = async (priority, typeBug) => {
     console.log(SquadsDone[1])
     console.log(SquadsDone[2])
 
-    dataTemplate['algorithmsSquad'] = counterone;
-    dataTemplate['applicantsAcquisitionSquad'] = countertwo;
-    dataTemplate['platformSquad'] = counterthree;
-    dataTemplate['algorithms'] = 'algorithmsSquad';
-    dataTemplate['applicantsAcquisition'] = 'applicantsAcquisitionSquad';
-    dataTemplate['platform'] = 'platformSquad';
+    dataTemplatejson[0].squad = 'Algorithms squad';
+    dataTemplatejson[0].number = counterone;
+    dataTemplatejson[0].priority = priority ;
+    dataTemplatejson[0].typeOfBug = typeBug ;
+
+    dataTemplatejson[1].squad = 'Applicants acquisition squad';
+    dataTemplatejson[1].number = countertwo;
+    dataTemplatejson[1].priority = priority ;
+    dataTemplatejson[1].typeOfBug = typeBug ;
+
+    dataTemplatejson[2].squad = 'Platform squad';
+    dataTemplatejson[2].number = counterthree;
+    dataTemplatejson[2].priority = priority ;
+    dataTemplatejson[2].typeOfBug = typeBug ;
+
 
     /* const obj = Object.assign({}, SquadsDone); */
-    fs.writeFile(path.join(__dirname, '../JSONFile/data_AL_AA_PS.json'), JSON.stringify(dataTemplate), function (err) {
+    fs.writeFile(path.join(__dirname, '../JSONFile/data_AL_AA_PS.json'), JSON.stringify(dataTemplatejson), function (err) {
 
     })
 
@@ -437,7 +523,7 @@ const getResults = async (priority, typeBug) => {
     platformSquad = []
     SquadsDone = [algorithmsSquad, applicantsAcquisitionSquad, platformSquad]
     console.log(234, SquadsDone)
-    return dataTemplate
+    return dataTemplatejson
 
 
 }
@@ -482,6 +568,23 @@ const getResultsSecondList = async (priority, typeBug) => {
     console.log(SquadDoneSecondList[1])
     console.log(SquadDoneSecondList[2])
 
+    dataSecondSquadListJson[0].squad = 'Genome squad';
+    dataSecondSquadListJson[0].number = counterone;
+    dataSecondSquadListJson[0].priority = priority ;
+    dataSecondSquadListJson[0].typeOfBug = typeBug ;
+
+    dataSecondSquadListJson[1].squad = 'UGG squad';
+    dataSecondSquadListJson[1].number = countertwo;
+    dataSecondSquadListJson[1].priority = priority ;
+    dataSecondSquadListJson[1].typeOfBug = typeBug ;
+
+    dataSecondSquadListJson[2].squad = 'Work squad';
+    dataSecondSquadListJson[2].number = counterthree;
+    dataSecondSquadListJson[2].priority = priority ;
+    dataSecondSquadListJson[2].typeOfBug = typeBug ;
+    
+    
+
     dataSecondSquadList['genomeSquadDone'] = counterone;
     dataSecondSquadList['uggSquadDone'] = countertwo;
     dataSecondSquadList['workSquadDone'] = counterthree;
@@ -490,7 +593,7 @@ const getResultsSecondList = async (priority, typeBug) => {
     dataSecondSquadList['workSquad'] = 'workSquad';
 
     /* const obj = Object.assign({}, SquadDoneSecondList); */
-    fs.writeFile(path.join(__dirname, '../JSONFile/data_G_UGG.json'), JSON.stringify(dataSecondSquadList), function (err) {
+    fs.writeFile(path.join(__dirname, '../JSONFile/data_G_UGG.json'), JSON.stringify(dataSecondSquadListJson), function (err) {
 
     })
 
@@ -499,7 +602,7 @@ const getResultsSecondList = async (priority, typeBug) => {
     workSquadDone = []
     SquadDoneSecondList = [genomeSquadDone, uggSquadDone, workSquadDone]
     console.log(234, SquadDoneSecondList)
-    return dataSecondSquadList
+    return dataSecondSquadListJson
 
 }
 
@@ -540,6 +643,17 @@ const getResultsThirdList = async (priority, typeBug) => {
     console.log(SquadDoneThirdList[0])
     console.log(SquadDoneThirdList[1])
 
+    dataThirdSquadListJson[0].squad = 'Talent squad';
+    dataThirdSquadListJson[0].number = counterone;
+    dataThirdSquadListJson[0].priority = priority ;
+    dataThirdSquadListJson[0].typeOfBug = typeBug ;
+
+    dataThirdSquadListJson[1].squad = 'Talent seeker acquisition squad';
+    dataThirdSquadListJson[1].number = countertwo;
+    dataThirdSquadListJson[1].priority = priority ;
+    dataThirdSquadListJson[1].typeOfBug = typeBug ;
+
+
     dataThirdSquadList['talentSquadDone'] = counterone;
     dataThirdSquadList['talentSeekerAcquisitionSquad'] = countertwo;
     dataThirdSquadList['talentSquad']='talentSquad';
@@ -554,7 +668,7 @@ const getResultsThirdList = async (priority, typeBug) => {
     talentSeekerAcquisitionSquad = []
     SquadDoneThirdList = [talentSquadDone, talentSeekerAcquisitionSquad]
     console.log(234, SquadsDone)
-    return dataThirdSquadList
+    return dataThirdSquadListJson
 
 }
 
