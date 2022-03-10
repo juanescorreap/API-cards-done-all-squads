@@ -97,9 +97,9 @@ router.get('/trigger-g-ugg-w/:typeofbug/:priority', async (req, res) => {
         genomeSquadDone: 0,
         uggSquadDone: 0,
         workSquadDone: 0,
-        genomeSquadDone:'genomeSquadDone',
-        uggSquadDone:'uggSquadDone',
-        workSquadDone:'workSquadDone'
+        genomeSquad:'genomeSquad',
+        uggSquad:'uggSquad',
+        workSquad:'workSquad'
     }
 })
 
@@ -141,8 +141,8 @@ router.get('/trigger-t-tsas/:typeofbug/:priority', async (req, res) => {
     dataThirdSquadList = {
         talentSquadDone: 0,
         talentSeekerAcquisitionSquad: 0,
-        talentSquadDone:'talentSquadDone',
-        talentSeekerAcquisitionSquad:'talentSeekerAcquisitionSquad'
+        talentSquad:'talentSquad',
+        talentSeekerAcquisition:'talentSeekerAcquisitionSquad'
     }
 })
 
@@ -420,9 +420,13 @@ const getResults = async (priority, typeBug) => {
     console.log(SquadsDone[1])
     console.log(SquadsDone[2])
 
-    dataTemplate['algorithmsSquad'] = counterone
-    dataTemplate['applicantsAcquisitionSquad'] = countertwo
-    dataTemplate['platformSquad'] = counterthree
+    dataTemplate['algorithmsSquad'] = counterone;
+    dataTemplate['applicantsAcquisitionSquad'] = countertwo;
+    dataTemplate['platformSquad'] = counterthree;
+    dataTemplate['algorithms'] = 'algorithmsSquad';
+    dataTemplate['applicantsAcquisition'] = 'applicantsAcquisitionSquad';
+    dataTemplate['platform'] = 'platformSquad';
+
     /* const obj = Object.assign({}, SquadsDone); */
     fs.writeFile(path.join(__dirname, '../JSONFile/data_AL_AA_PS.json'), JSON.stringify(dataTemplate), function (err) {
 
@@ -478,9 +482,12 @@ const getResultsSecondList = async (priority, typeBug) => {
     console.log(SquadDoneSecondList[1])
     console.log(SquadDoneSecondList[2])
 
-    dataSecondSquadList['genomeSquadDone'] = counterone
-    dataSecondSquadList['uggSquadDone'] = countertwo
-    dataSecondSquadList['workSquadDone'] = counterthree
+    dataSecondSquadList['genomeSquadDone'] = counterone;
+    dataSecondSquadList['uggSquadDone'] = countertwo;
+    dataSecondSquadList['workSquadDone'] = counterthree;
+    dataSecondSquadList['genomeSquad'] = 'genomeSquad';
+    dataSecondSquadList['uggSquad'] = 'uggSquad';
+    dataSecondSquadList['workSquad'] = 'workSquad';
 
     /* const obj = Object.assign({}, SquadDoneSecondList); */
     fs.writeFile(path.join(__dirname, '../JSONFile/data_G_UGG.json'), JSON.stringify(dataSecondSquadList), function (err) {
@@ -533,8 +540,10 @@ const getResultsThirdList = async (priority, typeBug) => {
     console.log(SquadDoneThirdList[0])
     console.log(SquadDoneThirdList[1])
 
-    dataThirdSquadList['talentSquadDone'] = counterone
-    dataThirdSquadList['talentSeekerAcquisitionSquad'] = countertwo
+    dataThirdSquadList['talentSquadDone'] = counterone;
+    dataThirdSquadList['talentSeekerAcquisitionSquad'] = countertwo;
+    dataThirdSquadList['talentSquad']='talentSquad';
+    dataThirdSquadList['talentSeekerAcquisition']='talentSeekerAcquisitionSquad';
 
     /* const obj = Object.assign({}, SquadDoneThirdList); */
     fs.writeFile(path.join(__dirname, '../JSONFile/data_T_TSAS.json'), JSON.stringify(dataThirdSquadList), function (err) {
