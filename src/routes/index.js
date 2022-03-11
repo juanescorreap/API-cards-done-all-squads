@@ -612,7 +612,7 @@ const getResultsSecondList = async (priority, typeBug) => {
     workSquadDone = []
     SquadDoneSecondList = [genomeSquadDone, uggSquadDone, workSquadDone]
     console.log(234, SquadDoneSecondList)
-    return dataSecondSquadListJson
+    return JSON.stringify(dataSecondSquadListJson)
 
 }
 
@@ -684,7 +684,7 @@ const getResultsThirdList = async (priority, typeBug) => {
     talentSeekerAcquisitionSquad = []
     SquadDoneThirdList = [talentSquadDone, talentSeekerAcquisitionSquad]
     console.log(234, SquadsDone)
-    return dataThirdSquadListJson
+    return JSON.stringify(dataThirdSquadListJson)
 
 }
 
