@@ -48,35 +48,24 @@ router.get('/trigger-al-aa-ps/:typeofbug/:priority', async (req, res) => {
             res.json(({ "message": "I couldn't find that route, sorry" }))
     }
 
-    dataTemplatejson={
-        "Algorithms squad":[
-            {
-                "squad": "Algorithms squad",
-                "number": 0,
-                "priority": "",
-                "typeOfBug": ""
-            }
-        ],
-        "Applicant acquisition squad":[
-            {
-                "squad": "Applicants acquisition squad",
-                "number": 0,
-                "priority": "",
-                "typeOfBug": ""
-            }
-        ],
-        "Platform squad":[
-            {
-                "squad": "Platform squad",
-                "number": 0,
-                "priority": "",
-                "typeOfBug": ""
-            }
-    
-        
-        ]
-    
-    }
+    dataTemplatejson=[
+        {
+            "squad": "Algorithms squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "Applicants acquisition squad",
+            "number": 2,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "Platform squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }
+    ]
 })
 
 router.get('/trigger-g-ugg-w/:typeofbug/:priority', async (req, res) => {
@@ -253,36 +242,24 @@ var dataTemplate = {
 
 }
 
-var dataTemplatejson= {
-    "Algorithms squad":[
-        {
-            "squad": "Algorithms squad",
-            "number": 0,
-            "priority": "",
-            "typeOfBug": ""
-        }
-    ],
-    "Applicant acquisition squad":[
-        {
-            "squad": "Applicants acquisition squad",
-            "number": 0,
-            "priority": "",
-            "typeOfBug": ""
-        }
-    ],
-    "Platform squad":[
-        {
-            "squad": "Platform squad",
-            "number": 0,
-            "priority": "",
-            "typeOfBug": ""
-        }
-
-    
-    ]
-
-}
-
+var dataTemplatejson=[
+    {
+        "squad": "Algorithms squad",
+        "number": 5,
+        "priority": "",
+        "typeOfBug": ""
+    }, {
+        "squad": "Algorithms squad",
+        "number": 2,
+        "priority": "",
+        "typeOfBug": ""
+    }, {
+        "squad": "Algorithms squad",
+        "number": 0,
+        "priority": "",
+        "typeOfBug": ""
+    }
+]
 
 var dataSecondSquadList = {
     genomeSquadDone: 0,
@@ -525,7 +502,7 @@ const getResults = async (priority, typeBug) => {
     console.log(SquadsDone[1])
     console.log(SquadsDone[2])
 
-/*     dataTemplatejson[0].squad = 'Algorithms squad';
+    dataTemplatejson[0].squad = 'Algorithms squad';
     dataTemplatejson[0].number = counterone;
     dataTemplatejson[0].priority = priority ;
     dataTemplatejson[0].typeOfBug = typeBug ;
@@ -538,7 +515,7 @@ const getResults = async (priority, typeBug) => {
     dataTemplatejson[2].squad = 'Platform squad';
     dataTemplatejson[2].number = counterthree;
     dataTemplatejson[2].priority = priority ;
-    dataTemplatejson[2].typeOfBug = typeBug ; */
+    dataTemplatejson[2].typeOfBug = typeBug ;
 
 
     /* const obj = Object.assign({}, SquadsDone); */
@@ -551,7 +528,7 @@ const getResults = async (priority, typeBug) => {
     platformSquad = []
     SquadsDone = [algorithmsSquad, applicantsAcquisitionSquad, platformSquad]
     console.log(234, SquadsDone)
-    return dataTemplatejson
+    return JSON.stringify(dataTemplatejson)
 
 
 }
