@@ -401,7 +401,7 @@ const getResults = async (priority, typeBug) => {
 
 
 
-    return data_AL_AA_PS
+    return JSON.stringify(data_AL_AA_PS)
 
 }
 
@@ -508,7 +508,7 @@ const getResultsSecondList = async (priority, typeBug) => {
 
 
 
-    return data_G_UGG_W
+    return JSON.stringify(data_G_UGG_W)
 
 }
 
@@ -595,7 +595,7 @@ const getResultsThirdList = async (priority, typeBug) => {
     data_T_TSAS[1].typeOfBug = typeBug
 
 
-    return data_T_TSAS
+    return JSON.stringify(data_T_TSAS)
 
 }
 
