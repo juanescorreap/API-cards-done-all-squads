@@ -245,17 +245,17 @@ var dataTemplate = {
 var dataTemplatejson=[
     {
         "squad": "Algorithms squad",
-        "number": 5,
+        "number": "",
         "priority": "",
         "typeOfBug": ""
     }, {
         "squad": "Algorithms squad",
-        "number": 2,
+        "number": "",
         "priority": "",
         "typeOfBug": ""
     }, {
         "squad": "Algorithms squad",
-        "number": 0,
+        "number": "",
         "priority": "",
         "typeOfBug": ""
     }
@@ -274,17 +274,17 @@ var dataSecondSquadList = {
 var dataSecondSquadListJson =[
     {
         "squad": "Genome squad",
-        "number": 0,
+        "number": "",
         "priority": "",
         "typeOfBug": ""
     }, {
         "squad": "UGG squad",
-        "number": 0,
+        "number": "",
         "priority": "",
         "typeOfBug": ""
     }, {
         "squad": "Work squad",
-        "number": 0,
+        "number": "",
         "priority": "",
         "typeOfBug": ""
     }
@@ -300,12 +300,12 @@ var dataThirdSquadList = {
 var dataThirdSquadListJson =[
     {
         "squad": "Talent squad",
-        "number": 0,
+        "number": "",
         "priority": "",
         "typeOfBug": ""
     }, {
         "squad": "Talent seeker acquisition squad",
-        "number": 0,
+        "number": "",
         "priority": "",
         "typeOfBug": ""
     }
