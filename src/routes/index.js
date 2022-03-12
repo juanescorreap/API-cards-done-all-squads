@@ -154,6 +154,7 @@ router.get('/trigger-t-tsas/:typeofbug/:priority', async (req, res) => {
 
 const fetch = require('node-fetch')
 const { json } = require('express/lib/response')
+const req = require('express/lib/request')
 
 const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef7294344e5b/query"
 
@@ -335,17 +336,20 @@ const getResults = async (priority, typeBug, reqTypeofProcess) => {
             "squad": "Algorithms squad",
             "number": 0,
             "priority": "",
-            "typeOfBug": ""
+            "typeOfBug": "",
+            "state":""
         }, {
             "squad": "Applicants acquisition squad",
             "number": 2,
             "priority": "",
-            "typeOfBug": ""
+            "typeOfBug": "",
+            "state":""
         }, {
             "squad": "Platform squad",
             "number": 0,
             "priority": "",
-            "typeOfBug": ""
+            "typeOfBug": "",
+            "state":""
         }
     ]
 
@@ -407,16 +411,19 @@ const getResults = async (priority, typeBug, reqTypeofProcess) => {
     data_AL_AA_PS[0].number = counterone
     data_AL_AA_PS[0].priority = priority
     data_AL_AA_PS[0].typeOfBug = typeBug
+    data_AL_AA_PS[0].state = reqTypeofProcess
 
     data_AL_AA_PS[1].squad = 'Applicants acquisition squad'
     data_AL_AA_PS[1].number = countertwo
     data_AL_AA_PS[1].priority = priority
     data_AL_AA_PS[1].typeOfBug = typeBug
+    data_AL_AA_PS[1].state = reqTypeofProcess
 
     data_AL_AA_PS[2].squad = 'Platform squad'
     data_AL_AA_PS[2].number = counterthree
     data_AL_AA_PS[2].priority = priority
     data_AL_AA_PS[2].typeOfBug = typeBug
+    data_AL_AA_PS[2].state = reqTypeofProcess
 
 
 
@@ -442,17 +449,20 @@ const getResultsSecondList = async (priority, typeBug, reqTypeofProcess) => {
             "squad": "Genome squad",
             "number": "",
             "priority": "",
-            "typeOfBug": ""
+            "typeOfBug": "",
+            "state": ""
         }, {
             "squad": "UGG squad",
             "number": "",
             "priority": "",
-            "typeOfBug": ""
+            "typeOfBug": "",
+            "state": ""
         }, {
             "squad": "Work squad",
             "number": "",
             "priority": "",
-            "typeOfBug": ""
+            "typeOfBug": "",
+            "state": ""
         }
     ]
 
@@ -514,16 +524,21 @@ const getResultsSecondList = async (priority, typeBug, reqTypeofProcess) => {
     data_G_UGG_W[0].number = counterone
     data_G_UGG_W[0].priority = priority
     data_G_UGG_W[0].typeOfBug = typeBug
+    data_G_UGG_W[0].state = reqTypeofProcess
+
+
 
     data_G_UGG_W[1].squad = 'UGG squad'
     data_G_UGG_W[1].number = countertwo
     data_G_UGG_W[1].priority = priority
     data_G_UGG_W[1].typeOfBug = typeBug
+    data_G_UGG_W[1].state = reqTypeofProcess
 
     data_G_UGG_W[2].squad = 'Work squad'
     data_G_UGG_W[2].number = counterthree
     data_G_UGG_W[2].priority = priority
     data_G_UGG_W[2].typeOfBug = typeBug
+    data_G_UGG_W[2].state = reqTypeofProcess
 
 
 
@@ -545,12 +560,14 @@ const getResultsThirdList = async (priority, typeBug, reqTypeofProcess) => {
             "squad": "Talent squad",
             "number": 0,
             "priority": "",
-            "typeOfBug": ""
+            "typeOfBug": "",
+            "state":""
         }, {
             "squad": "Talent seeker acquisition squad",
             "number": 2,
             "priority": "",
-            "typeOfBug": ""
+            "typeOfBug": "",
+            "state":""
         }
     ]
 
@@ -608,11 +625,13 @@ const getResultsThirdList = async (priority, typeBug, reqTypeofProcess) => {
     data_T_TSAS[0].number = counterone
     data_T_TSAS[0].priority = priority
     data_T_TSAS[0].typeOfBug = typeBug
+    data_T_TSAS[0].state = reqTypeofProcess
 
     data_T_TSAS[1].squad = 'Talent seeker acquisition squad'
     data_T_TSAS[1].number = countertwo
     data_T_TSAS[1].priority = priority
     data_T_TSAS[1].typeOfBug = typeBug
+    data_T_TSAS[1].state=reqTypeofProcess
 
 
     return JSON.stringify(data_T_TSAS)
