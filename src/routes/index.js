@@ -144,25 +144,6 @@ const req = require('express/lib/request')
 const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef7294344e5b/query"
 
 
-var dataTemplatejson = [
-    {
-        "squad": "Algorithms squad",
-        "number": "",
-        "priority": "",
-        "typeOfBug": ""
-    }, {
-        "squad": "Algorithms squad",
-        "number": "",
-        "priority": "",
-        "typeOfBug": ""
-    }, {
-        "squad": "Algorithms squad",
-        "number": "",
-        "priority": "",
-        "typeOfBug": ""
-    }
-]
-
 
 const listSquads = ['Algorithms squad', 'Applicants acquisition squad', 'Platform squad']/* , 'Genome squad','Work squad', 'Talent squad', 'UGG squad','Talent seeker acquisition squad'] */
 const secondListSquads=['Genome squad', 'UGG squad','Work squad']
@@ -293,11 +274,7 @@ async function requestFunction(next_cursor_fun,result_pagination, squadBody, bug
 /* let algorithmsSquad = []
 let applicantsAcquisitionSquad = []
 let platformSquad = [] */
-let genomeSquadDone = []
-let workSquadDone = []
-let talentSquadDone = []
-let uggSquadDone = []
-let talentSeekerAcquisitionSquad = []
+
 
 
 
@@ -533,7 +510,7 @@ const getResultsSecondList = async (priority, typeBug, reqTypeofProcess) => {
 }
 
 const getResultsThirdList = async (priority, typeBug, reqTypeofProcess) => {
-    
+    let talentSquadDone = []
     let talentSeekerAcquisitionSquad = []
     let SquadDoneThirdList = [talentSquadDone, talentSeekerAcquisitionSquad]
     let triggerfun = true
@@ -567,7 +544,7 @@ const getResultsThirdList = async (priority, typeBug, reqTypeofProcess) => {
 
     }
 
-    for (let i = 0; i < secondListSquads.length; i++) {
+    for (let i = 0; i < thirdListSquads.length; i++) {
         trigger_pagination(true)
         while (result_pagination != false) {
             if (triggerfun) {
@@ -575,7 +552,7 @@ const getResultsThirdList = async (priority, typeBug, reqTypeofProcess) => {
                 triggerfun = false
             }
             try {
-                result = await requestFunction(next_cursor_fun, result_pagination,secondListSquads[i], typeOfProcesses(reqTypeofProcess), priority, typeBug)
+                result = await requestFunction(next_cursor_fun, result_pagination,thirdListSquads[i], typeOfProcesses(reqTypeofProcess), priority, typeBug)
             } catch (err) {
                 console.log(err)
             }
