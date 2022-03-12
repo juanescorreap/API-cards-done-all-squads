@@ -296,8 +296,114 @@ let talentSeekerAcquisitionSquad = []
 
 
 /* var SquadsDone = [algorithmsSquad, applicantsAcquisitionSquad, platformSquad] *//* , genomeSquadDone, workSquadDone, talentSquadDone,uggSquadDone,talentSeekerAcquisitionSquad] */
-var SquadDoneSecondList = [genomeSquadDone, uggSquadDone, workSquadDone]/* ,workSquadDone,talentSeekerAcquisitionSquad] */
-var SquadDoneThirdList = [talentSquadDone, talentSeekerAcquisitionSquad]
+/* var SquadDoneSecondList = [genomeSquadDone, uggSquadDone, workSquadDone]/* ,workSquadDone,talentSeekerAcquisitionSquad] */
+/* var SquadDoneThirdList = [talentSquadDone, talentSeekerAcquisitionSquad] */
+
+
+const getResults = async (priority, typeBug) => {
+    
+    let algorithmsSquad = []
+    let applicantsAcquisitionSquad = []
+    let platformSquad = []
+    var SquadsDone = [algorithmsSquad, applicantsAcquisitionSquad, platformSquad]
+    let triggerfun = true
+    let result_pagination = true
+    let next_cursor_fun = '';
+
+    let data_AL_AA_PS = [
+        {
+            "squad": "Algorithms squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "Applicants acquisition squad",
+            "number": 2,
+            "priority": "",
+            "typeOfBug": ""
+        }, {
+            "squad": "Platform squad",
+            "number": 0,
+            "priority": "",
+            "typeOfBug": ""
+        }
+    ]
+
+    function trigger_pagination(prop) {
+        if (prop) {
+            result_pagination = true
+            triggerfun = true
+        } else {
+            result_pagination = false
+            next_cursor_fun = ''
+        }
+
+    }
+
+    for (let i = 0; i < listSquads.length; i++) {
+        trigger_pagination(true)
+        while (result_pagination != false) {
+            if (triggerfun) {
+                trigger_pagination(false)
+                triggerfun = false
+            }
+            try {
+                result = await requestFunction(next_cursor_fun, result_pagination,listSquads[i], done, priority, typeBug)
+            } catch (err) {
+                console.log(err)
+            }
+            SquadsDone[i] = [...SquadsDone[i], result.results.length]
+            result_pagination = result.has_more;
+            next_cursor_fun = result.next_cursor;
+            console.log(i)
+            console.log(result.next_cursor)
+            console.log(SquadsDone);
+            console.log(next_cursor_fun);
+            console.log(result_pagination)
+
+        }
+
+    }
+
+    var counterone = 0, countertwo = 0, counterthree = 0
+
+    for (let i = 0; i < SquadsDone[0].length; i++) {
+        counterone = counterone + SquadsDone[0][i]
+    }
+
+    for (let i = 0; i < SquadsDone[1].length; i++) {
+        countertwo = countertwo + SquadsDone[1][i]
+    }
+
+    for (let i = 0; i < SquadsDone[2].length; i++) {
+        counterthree = counterthree + SquadsDone[2][i]
+    }
+
+    console.log(SquadsDone[0])
+    console.log(SquadsDone[1])
+    console.log(SquadsDone[2])
+
+    data_AL_AA_PS[0].squad = 'Algorithms squad'
+    data_AL_AA_PS[0].number = counterone
+    data_AL_AA_PS[0].priority = priority
+    data_AL_AA_PS[0].typeOfBug = typeBug
+
+    data_AL_AA_PS[1].squad = 'Applicants acquisition squad'
+    data_AL_AA_PS[1].number = countertwo
+    data_AL_AA_PS[1].priority = priority
+    data_AL_AA_PS[1].typeOfBug = typeBug
+
+    data_AL_AA_PS[2].squad = 'Platform squad'
+    data_AL_AA_PS[2].number = counterthree
+    data_AL_AA_PS[2].priority = priority
+    data_AL_AA_PS[2].typeOfBug = typeBug
+
+
+
+
+    return data_AL_AA_PS
+
+}
 
 
 const getResultsSecondList = async (priority, typeBug) => {
@@ -408,7 +514,6 @@ const getResultsSecondList = async (priority, typeBug) => {
 
 const getResultsThirdList = async (priority, typeBug) => {
     
-    let workSquadDone = []
     let talentSeekerAcquisitionSquad = []
     let SquadDoneThirdList = [talentSquadDone, talentSeekerAcquisitionSquad]
     let triggerfun = true
@@ -479,125 +584,22 @@ const getResultsThirdList = async (priority, typeBug) => {
     console.log(SquadDoneThirdList[0])
     console.log(SquadDoneThirdList[1])
 
-    data_AL_AA_PS[0].squad = 'Talent squad'
-    data_AL_AA_PS[0].number = counterone
-    data_AL_AA_PS[0].priority = priority
-    data_AL_AA_PS[0].typeOfBug = typeBug
-
-    data_AL_AA_PS[1].squad = 'Talent seeker acquisition squad'
-    data_AL_AA_PS[1].number = countertwo
-    data_AL_AA_PS[1].priority = priority
-    data_AL_AA_PS[1].typeOfBug = typeBug
-
-
-    return data_AL_AA_PS
-
-}
-
-const getResults = async (priority, typeBug) => {
-    
-    let algorithmsSquad = []
-    let applicantsAcquisitionSquad = []
-    let platformSquad = []
-    var SquadsDone = [algorithmsSquad, applicantsAcquisitionSquad, platformSquad]
-    let triggerfun = true
-    let result_pagination = true
-    let next_cursor_fun = '';
-
-    let data_AL_AA_PS = [
-        {
-            "squad": "Algorithms squad",
-            "number": 0,
-            "priority": "",
-            "typeOfBug": ""
-        }, {
-            "squad": "Applicants acquisition squad",
-            "number": 2,
-            "priority": "",
-            "typeOfBug": ""
-        }, {
-            "squad": "Platform squad",
-            "number": 0,
-            "priority": "",
-            "typeOfBug": ""
-        }
-    ]
-
-    function trigger_pagination(prop) {
-        if (prop) {
-            result_pagination = true
-            triggerfun = true
-        } else {
-            result_pagination = false
-            next_cursor_fun = ''
-        }
-
-    }
-
-    for (let i = 0; i < secondListSquads.length; i++) {
-        trigger_pagination(true)
-        while (result_pagination != false) {
-            if (triggerfun) {
-                trigger_pagination(false)
-                triggerfun = false
-            }
-            try {
-                result = await requestFunction(next_cursor_fun, result_pagination,secondListSquads[i], done, priority, typeBug)
-            } catch (err) {
-                console.log(err)
-            }
-            SquadsDone[i] = [...SquadsDone[i], result.results.length]
-            result_pagination = result.has_more;
-            next_cursor_fun = result.next_cursor;
-            console.log(i)
-            console.log(result.next_cursor)
-            console.log(SquadsDone);
-            console.log(next_cursor_fun);
-            console.log(result_pagination)
-
-        }
-
-    }
-
-    var counterone = 0, countertwo = 0, counterthree = 0
-
-    for (let i = 0; i < SquadsDone[0].length; i++) {
-        counterone = counterone + SquadsDone[0][i]
-    }
-
-    for (let i = 0; i < SquadsDone[1].length; i++) {
-        countertwo = countertwo + SquadsDone[1][i]
-    }
-
-    for (let i = 0; i < SquadsDone[2].length; i++) {
-        counterthree = counterthree + SquadsDone[2][i]
-    }
-
-    console.log(SquadsDone[0])
-    console.log(SquadsDone[1])
-    console.log(SquadsDone[2])
-
-    data_T_TSAS[0].squad = 'Algorithms squad'
+    data_T_TSAS[0].squad = 'Talent squad'
     data_T_TSAS[0].number = counterone
     data_T_TSAS[0].priority = priority
     data_T_TSAS[0].typeOfBug = typeBug
 
-    data_T_TSAS[1].squad = 'Applicants acquisition squad'
+    data_T_TSAS[1].squad = 'Talent seeker acquisition squad'
     data_T_TSAS[1].number = countertwo
     data_T_TSAS[1].priority = priority
     data_T_TSAS[1].typeOfBug = typeBug
-
-    data_T_TSAS[2].squad = 'Platform squad'
-    data_T_TSAS[2].number = counterthree
-    data_T_TSAS[2].priority = priority
-    data_T_TSAS[2].typeOfBug = typeBug
-
-
 
 
     return data_T_TSAS
 
 }
+
+
 
 
 
