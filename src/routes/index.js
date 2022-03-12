@@ -11,37 +11,38 @@ const typeBug = ['Bug', 'Post-release bug']
 
 
 
-router.get('/trigger-al-aa-ps/:typeofbug/:priority', async (req, res) => {
+router.get('/trigger-al-aa-ps/:typeofbug/:priority/:typeofprocess', async (req, res) => {
     /*     console.log(req.params['typeofbug'])
         res.json(req.params['typeofbug']); */
     const reqPriority = req.params['priority'].toLowerCase()
     const reqTypeofbug = req.params['typeofbug'].toLowerCase()
+    const reqTypeofProcess = req.params['typeofprocess'].toLowerCase()
 
     console.log(100, reqPriority, reqTypeofbug)
 
     switch (true) {
         case (reqPriority == 'medium' && reqTypeofbug == 'bug'):
-            var results = await getResults(priority[0], typeBug[0])
+            var results = await getResults(priority[0], typeBug[0], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'medium' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResults(priority[0], typeBug[1])
+            var results = await getResults(priority[0], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'high' && reqTypeofbug == 'bug'):
-            var results = await getResults(priority[1], typeBug[0])
+            var results = await getResults(priority[1], typeBug[0], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'high' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResults(priority[1], typeBug[1])
+            var results = await getResults(priority[1], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'highest' && reqTypeofbug == 'bug'):
-            var results = await getResults(priority[2], typeBug[0])
+            var results = await getResults(priority[2], typeBug[0],reqTypeofProcess)
             res.json(((results)))
             break
-        case (reqPriority == 'highest' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResults(priority[2], typeBug[1])
+        case (reqPriority == 'highest' && reqTypeofbug == 'post-release-bug', reqTypeofProcess):
+            var results = await getResults(priority[2], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         default:
@@ -76,27 +77,27 @@ router.get('/trigger-g-ugg-w/:typeofbug/:priority', async (req, res) => {
 
     switch (true) {
         case (reqPriority == 'medium' && reqTypeofbug == 'bug'):
-            var results = await getResultsSecondList(priority[0], typeBug[0])
+            var results = await getResultsSecondList(priority[0], typeBug[0], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'medium' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResultsSecondList(priority[0], typeBug[1])
+            var results = await getResultsSecondList(priority[0], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'high' && reqTypeofbug == 'bug'):
-            var results = await getResultsSecondList(priority[1], typeBug[0])
+            var results = await getResultsSecondList(priority[1], typeBug[0], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'high' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResultsSecondList(priority[1], typeBug[1])
+            var results = await getResultsSecondList(priority[1], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'highest' && reqTypeofbug == 'bug'):
-            var results = await getResultsSecondList(priority[2], typeBug[0])
+            var results = await getResultsSecondList(priority[2], typeBug[0], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'highest' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResultsSecondList(priority[2], typeBug[1])
+            var results = await getResultsSecondList(priority[2], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         default:
@@ -112,27 +113,27 @@ router.get('/trigger-t-tsas/:typeofbug/:priority', async (req, res) => {
 
     switch (true) {
         case (reqPriority == 'medium' && reqTypeofbug == 'bug'):
-            var results = await getResultsThirdList(priority[0], typeBug[0])
+            var results = await getResultsThirdList(priority[0], typeBug[0], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'medium' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResultsThirdList(priority[0], typeBug[1])
+            var results = await getResultsThirdList(priority[0], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'high' && reqTypeofbug == 'bug'):
-            var results = await getResultsThirdList(priority[1], typeBug[0])
+            var results = await getResultsThirdList(priority[1], typeBug[0], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'high' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResultsThirdList(priority[1], typeBug[1])
+            var results = await getResultsThirdList(priority[1], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'highest' && reqTypeofbug == 'bug'):
-            var results = await getResultsThirdList(priority[2], typeBug[0])
+            var results = await getResultsThirdList(priority[2], typeBug[0], reqTypeofProcess)
             res.json(((results)))
             break
         case (reqPriority == 'highest' && reqTypeofbug == 'post-release-bug'):
-            var results = await getResultsThirdList(priority[2], typeBug[1])
+            var results = await getResultsThirdList(priority[2], typeBug[1], reqTypeofProcess)
             res.json(((results)))
             break
         default:
@@ -194,10 +195,29 @@ function request(body) {
     }
 }
 const pull_request_merged = "📦 Pull request merged"
-const pull_request = "🧐  Pull request"
 const done = "✅   Done"
 const optimization_analysis = "🏃 Optimization analysis"
 const feature_flag_release = "🚩 Feature flag release"
+
+
+function typeOfProcesses(prop){
+    switch(prop){
+        case "done":
+            return done
+            break;
+        case "pull-request-merged":
+            return pull_request_merged
+            break;
+        case "optimization-analysis":
+            return optimization_analysis
+            break;
+        case "feature-flag-release":
+            return feature_flag_release
+            break;
+        default:
+            return done
+    }
+}
 
 function body(next_cursor, has_more, squadBody, bugOrDone, priority, typeBug) {
     let content = {
@@ -300,7 +320,7 @@ let talentSeekerAcquisitionSquad = []
 /* var SquadDoneThirdList = [talentSquadDone, talentSeekerAcquisitionSquad] */
 
 
-const getResults = async (priority, typeBug) => {
+const getResults = async (priority, typeBug, reqTypeofProcess) => {
     
     let algorithmsSquad = []
     let applicantsAcquisitionSquad = []
@@ -348,7 +368,7 @@ const getResults = async (priority, typeBug) => {
                 triggerfun = false
             }
             try {
-                result = await requestFunction(next_cursor_fun, result_pagination,listSquads[i], done, priority, typeBug)
+                result = await requestFunction(next_cursor_fun, result_pagination,listSquads[i], typeOfProcesses(reqTypeofProcess), priority, typeBug)
             } catch (err) {
                 console.log(err)
             }
@@ -406,7 +426,7 @@ const getResults = async (priority, typeBug) => {
 }
 
 
-const getResultsSecondList = async (priority, typeBug) => {
+const getResultsSecondList = async (priority, typeBug, reqTypeofProcess) => {
     
     
     let genomeSquadDone = []
@@ -455,7 +475,7 @@ const getResultsSecondList = async (priority, typeBug) => {
                 triggerfun = false
             }
             try {
-                result = await requestFunction(next_cursor_fun, result_pagination,secondListSquads[i], done, priority, typeBug)
+                result = await requestFunction(next_cursor_fun, result_pagination,secondListSquads[i], typeOfProcesses(reqTypeofProcess), priority, typeBug)
             } catch (err) {
                 console.log(err)
             }
@@ -512,7 +532,7 @@ const getResultsSecondList = async (priority, typeBug) => {
 
 }
 
-const getResultsThirdList = async (priority, typeBug) => {
+const getResultsThirdList = async (priority, typeBug, reqTypeofProcess) => {
     
     let talentSeekerAcquisitionSquad = []
     let SquadDoneThirdList = [talentSquadDone, talentSeekerAcquisitionSquad]
@@ -553,7 +573,7 @@ const getResultsThirdList = async (priority, typeBug) => {
                 triggerfun = false
             }
             try {
-                result = await requestFunction(next_cursor_fun, result_pagination,secondListSquads[i], done, priority, typeBug)
+                result = await requestFunction(next_cursor_fun, result_pagination,secondListSquads[i], typeOfProcesses(reqTypeofProcess), priority, typeBug)
             } catch (err) {
                 console.log(err)
             }
