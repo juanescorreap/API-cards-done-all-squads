@@ -49,31 +49,15 @@ router.get('/trigger-al-aa-ps/:typeofbug/:priority/:typeofprocess', async (req, 
             res.json(({ "message": "I couldn't find that route, sorry" }))
     }
 
-    dataTemplatejson = [
-        {
-            "squad": "Algorithms squad",
-            "number": 0,
-            "priority": "",
-            "typeOfBug": ""
-        }, {
-            "squad": "Applicants acquisition squad",
-            "number": 2,
-            "priority": "",
-            "typeOfBug": ""
-        }, {
-            "squad": "Platform squad",
-            "number": 0,
-            "priority": "",
-            "typeOfBug": ""
-        }
-    ]
+
 })
 
 
-router.get('/trigger-g-ugg-w/:typeofbug/:priority', async (req, res) => {
+router.get('/trigger-g-ugg-w/:typeofbug/:priority/:typeofprocess', async (req, res) => {
 
     const reqPriority = req.params['priority'].toLowerCase()
     const reqTypeofbug = req.params['typeofbug'].toLowerCase()
+    const reqTypeofProcess = req.params['typeofprocess'].toLowerCase()
 
     switch (true) {
         case (reqPriority == 'medium' && reqTypeofbug == 'bug'):
@@ -106,10 +90,11 @@ router.get('/trigger-g-ugg-w/:typeofbug/:priority', async (req, res) => {
 
 })
 
-router.get('/trigger-t-tsas/:typeofbug/:priority', async (req, res) => {
+router.get('/trigger-t-tsas/:typeofbug/:priority/:typeofprocess', async (req, res) => {
 
     const reqPriority = req.params['priority'].toLowerCase()
     const reqTypeofbug = req.params['typeofbug'].toLowerCase()
+    const reqTypeofProcess = req.params['typeofprocess'].toLowerCase()
 
     switch (true) {
         case (reqPriority == 'medium' && reqTypeofbug == 'bug'):
