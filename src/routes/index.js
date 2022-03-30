@@ -129,11 +129,7 @@ const getResults = async (squad) => {
         })
     })
 
-    return {
-        "squad": `${squad} squad`,
-        "total_": resumedCards.length,
-        "resumed_cards": counterBySquad,
-    }
+    return JSON.stringify({"resumed_cards": counterBySquad})
 }
 
 module.exports = router
