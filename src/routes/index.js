@@ -125,7 +125,8 @@ const getResults = async (squad) => {
                 squad: `${squad} squad`,
                 number: priority.count,
                 priority: priority.name,
-                typeOfBug: bugType.name
+                typeOfBug: bugType.name,
+                fixed: 0
             })
         })
     })
