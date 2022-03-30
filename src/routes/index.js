@@ -1,6 +1,4 @@
 const { Router } = require('express')
-const path = require('path')
-const fs = require('fs')
 const router = Router()
 
 // Routes
@@ -129,7 +127,7 @@ const getResults = async (squad) => {
         })
     })
 
-    return JSON.stringify({"resumed_cards": counterBySquad})
+    return JSON.stringify(counterBySquad)
 }
 
 module.exports = router
