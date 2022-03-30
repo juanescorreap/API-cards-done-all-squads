@@ -5,7 +5,7 @@ const router = Router()
 
 // Routes
 
-router.get('/:squad', async (req, res) => {
+router.get('/count/:squad', async (req, res) => {
     const reqSquad = req.params['squad']
     console.log("Squad -->", reqSquad)
     var results = await getResults(reqSquad)
