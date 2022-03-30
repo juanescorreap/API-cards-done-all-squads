@@ -1,4 +1,6 @@
 const { Router } = require('express')
+const fs = require('fs')
+const path = require('path')
 const router = Router()
 
 // Routes
@@ -127,7 +129,21 @@ const getResults = async (squad) => {
         })
     })
 
-    return JSON.stringify(counterBySquad)
+    const jsonResponse = JSON.stringify(counterBySquad)
+
+    let today = new Date()
+    today = today.toISOString().split('T')[0]
+
+    fs.writeFile(path.join(__dirname, `../jsonfiles/${today}-${squad}.json`), jsonResponse, (err) => {
+        if (err) {
+            console.error("Error saving the json")
+            console.error(err)
+        } else {
+            console.log(`${today}-${squad}.json`);
+        }
+    })
+
+    return jsonResponse
 }
 
 module.exports = router
