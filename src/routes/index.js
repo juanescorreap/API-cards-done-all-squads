@@ -9,7 +9,8 @@ router.get('/count/:squad', async (req, res) => {
     const reqSquad = req.params['squad']
     console.log("Squad -->", reqSquad)
     var results = await getResults(reqSquad)
-    res.json(((results)))
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(results));
 })
 
 ///Code
@@ -143,7 +144,7 @@ const getResults = async (squad) => {
         }
     })
 
-    return jsonResponse
+    return counterBySquad
 }
 
 module.exports = router
