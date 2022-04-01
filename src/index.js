@@ -11,14 +11,6 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 app.use(express.static(publicdir,{extensions:['json']})); //or ,{index:false, extensions:['json']}
-// app.use(function (req, res) {
-//     res.status(404);
-//     res.json({
-//         error: {
-//             code: 404
-//         }
-//     });
-// })
 
 //routes
 app.use(require('./routes/index.js'))

@@ -145,7 +145,7 @@ const getResults = async (squad) => {
         }
     })
 
-    return counterBySquad
+    return jsonResponse
 }
 
 module.exports = router
