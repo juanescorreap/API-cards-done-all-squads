@@ -4,18 +4,16 @@ const path = require('path')
 const router = Router()
 
 // Routes
-
 router.get('/count/:squad', async (req, res) => {
     const reqSquad = req.params['squad']
-    console.log("Squad -->", reqSquad)
     var results = await getResults(reqSquad)
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(results));
 })
-
-///Code
+// Routes
 
 const fetch = require('node-fetch')
+const { json } = require('express/lib/response')
 
 const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef7294344e5b/query"
 
@@ -32,16 +30,18 @@ function request(body) {
 }
 
 function filterContent(squad) {
-    return  {"and":[{"property":"Squad","multi_select":{"contains":`${squad} squad`}},{"property":"Assignees","people":{"does_not_contain":"d7e5b1d6-b838-4ed7-bc23-3035b6b09d90"}},{"or":[{"property":"Other labels","multi_select":{"contains":"Bug"}},{"property":"Other labels","multi_select":{"contains":"Post-release bug"}}]},{"or":[{"property":"Stage","select":{"equals":"✅   Done"}},{"property":"Stage","select":{"equals":"🚀   New functionalities"}},{"property":"Stage","select":{"equals":"🚩 Feature flag release"}},{"property":"Stage","select":{"equals":"🏃 Optimization analysis"}},{"property":"Stage","select":{"equals":"📦 Pull request merged"}}]}]}
+    return  {"and":[{"property":"Squad","multi_select":{"contains":`${squad} squad`}},{"property":"Assignees","people":{"does_not_contain":"d7e5b1d6-b838-4ed7-bc23-3035b6b09d90"}},{"or":[{"property":"Other labels","multi_select":{"does_not_contain":"On hold"}},{"property":"Other labels","multi_select":{"does_not_contain":"Post-release bug"}}]},{"or":[{"property":"Other labels","multi_select":{"contains":"Bug"}},{"property":"Other labels","multi_select":{"contains":"Post-release bug"}}]},{"or":[{"property":"Stage","select":{"equals":"✅   Done"}},{"property":"Stage","select":{"equals":"🚀   New functionalities"}},{"property":"Stage","select":{"equals":"🚩 Feature flag release"}},{"property":"Stage","select":{"equals":"🏃 Optimization analysis"}},{"property":"Stage","select":{"equals":"📦 Pull request merged"}}]}]}
 }
 
 function body(next_cursor, has_more, squadBody) {
     let content = {
-        "filter": filterContent(squadBody)
+        "filter": filterContent(squadBody),
+        "sorts":[{"property":"Last edited time","direction":"descending"}]
     }
 
     let contentCursor = {
         "filter": filterContent(squadBody),
+        "sorts":[{"property":"Last edited time","direction":"descending"}],
         "start_cursor": next_cursor
     }
 
@@ -105,13 +105,24 @@ const getResults = async (squad) => {
 
     objAllCards.map(card => {
         const props = card.properties;
-        resumedCards.push({
-            squasdOnCard: `${squad} squad`,
-            priority: typeof props.Priority == 'undefined' ? '' : props.Priority.select.name,
-            label: props["Other labels"].multi_select[0].name,
-            stage: typeof props.Stage == 'undefined' ? '' : props.Stage.select.name,
-            title: typeof props.dialog.title[0] == 'undefined' ? '' : props.dialog.title[0].text.content
+        const labels = props["Other labels"].multi_select
+        let shouldAdd = 0
+
+        labels.map(label => {
+            if (label.name == "On hold" || label.name == "Not a bug"){
+                shouldAdd++
+            }
         })
+
+        if(shouldAdd == 0){
+            resumedCards.push({
+                squasdOnCard: `${squad} squad`,
+                priority: typeof props.Priority == 'undefined' ? '' : props.Priority.select.name,
+                label: labels[0].name,
+                stage: typeof props.Stage == 'undefined' ? '' : props.Stage.select.name,
+                title: typeof props.dialog.title[0] == 'undefined' ? '' : props.dialog.title[0].text.content
+            })
+        }
     })
 
     let objSquad = {"name":`${squad} squad`,"type":[{"name":"Bug","priority":[{"name":"Medium","count":0},{"name":"High","count":0},{"name":"Highest","count":0}]},{"name":"Post-release bug","priority":[{"name":"Medium","count":0},{"name":"High","count":0},{"name":"Highest","count":0}]}]}
@@ -141,11 +152,17 @@ const getResults = async (squad) => {
             console.error("Error saving the json")
             console.error(err)
         } else {
-            console.log(`${today}-${squad}.json`);
+            console.log(`JSON Saved successfully ${today}-${squad}.json`);
         }
     })
 
-    return jsonResponse
+    const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/b8softc/'
+    const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
+    console.log(triggerZapier)
+
+    return JSON.stringify({
+        cardsCounting: counterBySquad
+    })
 }
 
 module.exports = router
