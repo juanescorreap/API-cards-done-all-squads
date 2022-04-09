@@ -11,7 +11,7 @@ router.get('/count/:squad', async (req, res) => {
     {
         reqSquad = "Applicants acquisition"
     }
-    console.log(123, reqSquad);
+    
     var results = await getResults(reqSquad)
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(results));
@@ -162,9 +162,9 @@ const getResults = async (squad) => {
         }
     })
 
-/*     const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/b8softc/'
+    const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/b8softc/'
     const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
-    console.log(triggerZapier) */
+    console.log(triggerZapier)
 
     return JSON.stringify({
         cardsCounting: counterBySquad
