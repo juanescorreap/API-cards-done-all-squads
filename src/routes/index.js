@@ -156,9 +156,9 @@ const getResults = async (squad) => {
         }
     })
 
-    const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/b8softc/'
+    const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
     const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
-    console.log(triggerZapier)
+    // console.log(triggerZapier)
 
     return JSON.stringify({
         cardsCounting: counterBySquad
