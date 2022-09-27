@@ -6,13 +6,8 @@ const router = Router()
 // Routes
 router.get('/count/:squad', async (req, res) => {
     var reqSquad = req.params['squad']
-    
-    if(reqSquad =="Applicants")
-    {
-        reqSquad = "Applicants acquisition"
-    }
-    
-    var results = await getResults(reqSquad)
+    const querySquad = getSquadName(reqSquad)
+    var results = await getResults(querySquad)
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(results));
 })
@@ -20,6 +15,7 @@ router.get('/count/:squad', async (req, res) => {
 
 const fetch = require('node-fetch')
 const { json } = require('express/lib/response')
+const counterBySquad = []
 
 const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef7294344e5b/query"
 
@@ -35,8 +31,28 @@ function request(body) {
     }
 }
 
+function getSquadName(string) {
+    return string.split("-").join(" ")
+}
+
+function getCounterBySquad(squadName, priority) {
+    let jsonPerSquad = counterBySquad.filter(objSquad => objSquad.squad == squadName && objSquad.priority == priority)
+    if (jsonPerSquad.length == 0) { // initialize the new object to start counting
+        jsonPerSquad = {
+            "squad": squadName,
+            "number": 0,
+            "priority": priority,
+            "typeOfBug": "Bug",
+            "fixed": 0
+        }
+        counterBySquad.push(jsonPerSquad)
+        return [jsonPerSquad]
+    }
+    return jsonPerSquad
+}
+
 function filterContent(squad) {
-    return  {"and":[{"property":"Squad","multi_select":{"contains":`${squad} squad`}},{"property":"Assignees","people":{"does_not_contain":"d7e5b1d6-b838-4ed7-bc23-3035b6b09d90"}},{"or":[{"property":"Other labels","multi_select":{"does_not_contain":"On hold"}},{"property":"Other labels","multi_select":{"does_not_contain":"Post-release bug"}}]},{"or":[{"property":"Other labels","multi_select":{"contains":"Bug"}},{"property":"Other labels","multi_select":{"contains":"Post-release bug"}}]},{"or":[{"property":"Stage","select":{"equals":"✅   Done"}},{"property":"Stage","select":{"equals":"🚀   New functionalities"}},{"property":"Stage","select":{"equals":"🚩 Feature flag release"}},{"property":"Stage","select":{"equals":"🏃 Optimization analysis"}},{"property":"Stage","select":{"equals":"📦 Pull request merged"}}]}]}
+    return  {"and":[{"property":"Squad","multi_select":{"contains":`${squad}`}},{"property":"Assignees","people":{"does_not_contain":"d7e5b1d6-b838-4ed7-bc23-3035b6b09d90"}},{"property": "Type","multi_select": {"is_not_empty": true}},{"property": "Priority","select": {"is_not_empty": true}},{"or":[{"property":"Type","multi_select":{"does_not_contain":"On hold"}},{"property":"Type","multi_select":{"does_not_contain":"Post-release bug"}}]},{"or":[{"property":"Type","multi_select":{"contains":"Bug"}},{"property":"Type","multi_select":{"contains":"Post-release bug"}}]},{"or":[{"property":"Stage","select":{"equals":"✅   Done"}},{"property":"Stage","select":{"equals":"🚀   New functionalities"}},{"property":"Stage","select":{"equals":"🚩 Feature flag release"}},{"property":"Stage","select":{"equals":"🏃 Optimization analysis"}},{"property":"Stage","select":{"equals":"📦 Pull request merged"}}]}]}
 }
 
 function body(next_cursor, has_more, squadBody) {
@@ -107,11 +123,9 @@ const getResults = async (squad) => {
         })
     }
 
-    let resumedCards = []
-
     objAllCards.map(card => {
         const props = card.properties;
-        const labels = props["Other labels"].multi_select
+        const labels = props["Type"].multi_select
         let shouldAdd = 0
 
         labels.map(label => {
@@ -121,31 +135,11 @@ const getResults = async (squad) => {
         })
 
         if(shouldAdd == 0){
-            resumedCards.push({
-                squasdOnCard: `${squad} squad`,
-                priority: typeof props.Priority == 'undefined' ? '' : props.Priority.select.name,
-                label: labels[0].name,
-                stage: typeof props.Stage == 'undefined' ? '' : props.Stage.select.name,
-                title: typeof props.dialog.title[0] == 'undefined' ? '' : props.dialog.title[0].text.content
+            const filterResumedCards = getCounterBySquad(squad, props.Priority.select.name)
+            filterResumedCards.map(squadFound => {
+                squadFound.number++
             })
         }
-    })
-
-    let objSquad = {"name":`${squad} squad`,"type":[{"name":"Bug","priority":[{"name":"Medium","count":0},{"name":"High","count":0},{"name":"Highest","count":0}]},{"name":"Post-release bug","priority":[{"name":"Medium","count":0},{"name":"High","count":0},{"name":"Highest","count":0}]}]}
-
-    let counterBySquad = []
-
-    objSquad.type.map(bugType => {
-        bugType.priority.map(priority => {
-            priority.count = resumedCards.filter(card => { return card.priority == priority.name && card.label == bugType.name}).length
-            counterBySquad.push({
-                squad: `${squad} squad`,
-                number: priority.count,
-                priority: priority.name,
-                typeOfBug: bugType.name,
-                fixed: 0
-            })
-        })
     })
 
     const jsonResponse = JSON.stringify(counterBySquad)
