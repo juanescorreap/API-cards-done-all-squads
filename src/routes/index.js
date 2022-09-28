@@ -143,6 +143,7 @@ const getResults = async (squad) => {
     })
 
     const jsonResponse = JSON.stringify(counterBySquad)
+    counterBySquad.length = 0
 
     let today = new Date()
     today = today.toISOString().split('T')[0]
@@ -161,7 +162,7 @@ const getResults = async (squad) => {
     // console.log(triggerZapier)
 
     return JSON.stringify({
-        cardsCounting: counterBySquad
+        cardsCounting: JSON.parse(jsonResponse)
     })
 }
 
