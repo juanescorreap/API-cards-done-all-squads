@@ -36,30 +36,35 @@ function getSquadName(string) {
     return string.split("-").join(" ")
 }
 
-function getCounterBySquad(squadName, priority) {
-    let jsonPerSquad = counterBySquad.filter(objSquad => objSquad.squad == squadName && objSquad.priority == priority)
-    if (jsonPerSquad.length == 0) { // initialize the new object to start counting
-        jsonPerSquad = {
+function initializeJsonSquad(squadName) {
+    const priorities = ["Medium", "High", "Highest"]
+    priorities.map(priority => {
+        counterBySquad.push({
             "squad": squadName,
             "number": 0,
             "priority": priority,
             "typeOfBug": "Bug",
             "fixed": 0
-        }
-        counterBySquad.push(jsonPerSquad)
-        return [jsonPerSquad]
+        })
+    })
+}
+
+function getCounterBySquad(squadName, priority) {
+    let jsonSquadExists = counterBySquad.filter(objSquad => objSquad.squad == squadName)
+    if (jsonSquadExists.length == 0) { // initialize the new object to start counting
+        initializeJsonSquad(squadName)
     }
-    return jsonPerSquad
+    return counterBySquad.filter(objSquad => objSquad.squad == squadName && objSquad.priority == priority)
 }
 
 function filterContent(squad) {
     return {
         "and": [
-            { 
+            {
                 "property": "Squad/team",
-                "multi_select": { 
-                    "contains": `${squad}` 
-                } 
+                "multi_select": {
+                    "contains": `${squad}`
+                }
             },
             {
                 "property": "Assignees",
@@ -212,6 +217,12 @@ const getResults = async (squad) => {
         }
     })
 
+    if (counterBySquad.length == 0) {
+        // if no data from that squad, we need to initialize it with 0
+        initializeJsonSquad(squad)
+    }
+    console.log("counterBySquad", counterBySquad)
+
     const jsonResponse = JSON.stringify(counterBySquad)
     counterBySquad.length = 0
 
@@ -226,12 +237,9 @@ const getResults = async (squad) => {
             console.log(`JSON Saved successfully ${today}-${squad}.json`);
         }
     })
-
-    if (JSON.parse(jsonResponse).length > 0){
-        const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
-        const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
-        // console.log(triggerZapier)
-    }
+    const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
+    const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
+    // console.log(triggerZapier)
 
     return JSON.stringify({
         cardsCounting: JSON.parse(jsonResponse)
