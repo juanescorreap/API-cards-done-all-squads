@@ -7,6 +7,7 @@ const router = Router()
 router.get('/count/:squad', async (req, res) => {
     var reqSquad = req.params['squad']
     const querySquad = getSquadName(reqSquad)
+    console.log(querySquad)
     var results = await getResults(querySquad)
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(results));
@@ -17,14 +18,14 @@ const fetch = require('node-fetch')
 const { json } = require('express/lib/response')
 const counterBySquad = []
 
-const apiURL = "https://api.notion.com/v1/databases/04b356ab699543a7824fef7294344e5b/query"
+const apiURL = "https://api.notion.com/v1/databases/990acfd57244433e894326793502f206/query"
 
 function request(body) {
     return {
         method: 'POST',
         headers: {
-            'Authorization': ' Bearer secret_6ChP3bBJktR1IwHXAb0q5oJAXhboEJNeQ1lM3vCMnLx',
-            'Notion-Version': '2021-05-13',
+            'Authorization': ' Bearer secret_8x0q8WHv3RX3g91rPygZWQDAw7o33Dyyv4gFdKSF2LD',
+            'Notion-Version': '2022-06-28',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(body)
@@ -52,18 +53,87 @@ function getCounterBySquad(squadName, priority) {
 }
 
 function filterContent(squad) {
-    return  {"and":[{"property":"Squad","multi_select":{"contains":`${squad}`}},{"property":"Assignees","people":{"does_not_contain":"d7e5b1d6-b838-4ed7-bc23-3035b6b09d90"}},{"property": "Type","multi_select": {"is_not_empty": true}},{"property": "Priority","select": {"is_not_empty": true}},{"or":[{"property":"Type","multi_select":{"does_not_contain":"On hold"}},{"property":"Type","multi_select":{"does_not_contain":"Post-release bug"}}]},{"or":[{"property":"Type","multi_select":{"contains":"Bug"}},{"property":"Type","multi_select":{"contains":"Post-release bug"}}]},{"or":[{"property":"Stage","select":{"equals":"✅   Done"}},{"property":"Stage","select":{"equals":"🚀   New functionalities"}},{"property":"Stage","select":{"equals":"🚩 Feature flag release"}},{"property":"Stage","select":{"equals":"🏃 Optimization analysis"}},{"property":"Stage","select":{"equals":"📦 Pull request merged"}}]}]}
+    return {
+        "and": [
+            { 
+                "property": "Squad/team",
+                "multi_select": { 
+                    "contains": `${squad}` 
+                } 
+            },
+            {
+                "property": "Assignees",
+                "people": {
+                    "does_not_contain": "d7e5b1d6-b838-4ed7-bc23-3035b6b09d90"
+                }
+            },
+            {
+                "property": "Type",
+                "multi_select": {
+                    "is_not_empty": true
+                }
+            },
+            {
+                "property": "Priority",
+                "select": {
+                    "is_not_empty": true
+                }
+            },
+            {
+                "or": [
+                    {
+                        "property": "Type",
+                        "multi_select": {
+                            "does_not_contain": "On hold"
+                        }
+                    },
+                    {
+                        "property": "Type",
+                        "multi_select": {
+                            "does_not_contain": "Not a bug"
+                        }
+                    }
+                ]
+            },
+            {
+                "property": "Type",
+                "multi_select": {
+                    "contains": "Bug"
+                }
+            },
+            {
+                "or": [
+                    {
+                        "property": "Stage",
+                        "status": {
+                            "equals": "✅   Done"
+                        }
+                    },
+                    {
+                        "property": "Stage",
+                        "status": {
+                            "equals": "🏃  Optimization analysis"
+                        }
+                    },
+                    {
+                        "property": "Stage",
+                        "status": {
+                            "equals": "📦 Pull request merged"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
 }
 
 function body(next_cursor, has_more, squadBody) {
     let content = {
-        "filter": filterContent(squadBody),
-        "sorts":[{"property":"Last edited time","direction":"descending"}]
+        "filter": filterContent(squadBody)
     }
 
     let contentCursor = {
         "filter": filterContent(squadBody),
-        "sorts":[{"property":"Last edited time","direction":"descending"}],
         "start_cursor": next_cursor
     }
 
@@ -76,7 +146,7 @@ function body(next_cursor, has_more, squadBody) {
     }
 }
 
-async function requestFunction(next_cursor_fun,result_pagination, squadBody) {
+async function requestFunction(next_cursor_fun, result_pagination, squadBody) {
     const resultTemp = await fetch(apiURL, request(body(next_cursor_fun, result_pagination, squadBody)))
         .then(response => response.json())
         .then(response => { return (response) })
@@ -108,9 +178,9 @@ const getResults = async (squad) => {
             triggerfun = false
         }
         try {
-            result = await requestFunction(next_cursor_fun, result_pagination,squad)
+            result = await requestFunction(next_cursor_fun, result_pagination, squad)
         } catch (err) {
-            console.error("error -->",err)
+            console.error("error -->", err)
         }
         cardCounter += result.results.length
         result_pagination = result.has_more;
@@ -129,12 +199,12 @@ const getResults = async (squad) => {
         let shouldAdd = 0
 
         labels.map(label => {
-            if (label.name == "On hold" || label.name == "Not a bug"){
+            if (label.name == "On hold" || label.name == "Not a bug") {
                 shouldAdd++
             }
         })
 
-        if(shouldAdd == 0){
+        if (shouldAdd == 0) {
             const filterResumedCards = getCounterBySquad(squad, props.Priority.select.name)
             filterResumedCards.map(squadFound => {
                 squadFound.number++
@@ -157,9 +227,11 @@ const getResults = async (squad) => {
         }
     })
 
-    const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
-    const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
-    // console.log(triggerZapier)
+    if (JSON.parse(jsonResponse).length > 0){
+        const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
+        const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
+        // console.log(triggerZapier)
+    }
 
     return JSON.stringify({
         cardsCounting: JSON.parse(jsonResponse)
