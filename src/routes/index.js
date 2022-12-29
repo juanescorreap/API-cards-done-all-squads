@@ -217,9 +217,9 @@ const getResults = async (squad) => {
             console.log(`JSON Saved successfully ${today}-${squad}.json`);
         }
     })
-    // const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
-    // const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
-    // console.log(triggerZapier)
+    const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
+    const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
+    //console.log(triggerZapier)
 
     return JSON.stringify({
         cardsCounting: JSON.parse(jsonResponse)
