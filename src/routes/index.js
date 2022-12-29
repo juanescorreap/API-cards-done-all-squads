@@ -85,20 +85,16 @@ function filterContent(squad) {
                 }
             },
             {
-                "or": [
-                    {
-                        "property": "Type",
-                        "multi_select": {
-                            "does_not_contain": "On hold"
-                        }
-                    },
-                    {
-                        "property": "Type",
-                        "multi_select": {
-                            "does_not_contain": "Not a bug"
-                        }
-                    }
-                ]
+                "property": "Type",
+                "multi_select": {
+                    "does_not_contain": "On hold"
+                }
+            },
+            {
+                "property": "Type",
+                "multi_select": {
+                    "does_not_contain": "Not a bug"
+                }
             },
             {
                 "property": "Type",
@@ -107,26 +103,10 @@ function filterContent(squad) {
                 }
             },
             {
-                "or": [
-                    {
-                        "property": "Stage",
-                        "status": {
-                            "equals": "✅   Done"
-                        }
-                    },
-                    {
-                        "property": "Stage",
-                        "status": {
-                            "equals": "🏃  Optimization analysis"
-                        }
-                    },
-                    {
-                        "property": "Stage",
-                        "status": {
-                            "equals": "📦 Pull request merged"
-                        }
-                    }
-                ]
+                "property": "Stage",
+                "status": {
+                    "equals": "✅   Done"
+                }
             }
         ]
     }
@@ -237,8 +217,8 @@ const getResults = async (squad) => {
             console.log(`JSON Saved successfully ${today}-${squad}.json`);
         }
     })
-    const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
-    const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
+    // const apiWebhookZapier = 'https://hooks.zapier.com/hooks/catch/3321237/bf9f8se/'
+    // const triggerZapier = await fetch(apiWebhookZapier, request(jsonResponse))
     // console.log(triggerZapier)
 
     return JSON.stringify({
